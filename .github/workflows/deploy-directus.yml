@@ -1,0 +1,32 @@
+# ขื่อ pipeline
+name: Deploy Directus to AWS EC2
+
+
+on:
+#  Branches run githun
+  push: 
+    branches:
+      - develop
+    paths:
+      - 'docker/cms/**'
+      - '.github/workflows/deploy-directus.yml'
+
+jobs:
+  deploy:
+  # image run on docker hun
+    runs-on: ubuntu-latest
+
+    steps:
+    # checkout git repo
+      - name: Checkout code
+        uses: actions/checkout@v2
+
+      - name: Deploy to EC2
+        uses: appleboy/ssh-action@master
+        with:
+          host: ${{ secrets.EC2_HOST }}
+          username: ${{ secrets.EC2_USERNAME }}
+          key: ${{ secrets.EC2_SSH_KEY }}
+          script: |
+            cd Devops-Proposition-2 && git pull && cd 
+            docker compose -f Devops-Proposition-2/docker/cms/docker-compose.yml up -d --build
