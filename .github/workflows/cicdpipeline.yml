@@ -13,7 +13,7 @@ jobs:
         uses: actions/checkout@v2
 
       - name: Deploy Directus on EC2 AWS
-        run: |
+        run:
 
           # Clone the repository
           git clone https://github.com/phongcheat-phus/cicdpipeline.git
