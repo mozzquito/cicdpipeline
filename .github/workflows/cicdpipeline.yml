@@ -21,32 +21,19 @@ jobs:
           script: |
 
             sudo apt update -y
-            sudo apt install -y docker.io docker-compose-plugin
+            sudo apt install -y docker.io 
+            #sudo apt install -y docker-compose-plugin
             sudo apt install docker-compose-v2
-            
-            sudo systemctl enable docker
-            sudo systemctl start docker
+
             sudo usermod -aG docker $USER
             newgrp docker
 
-            if [ -d "/home/${{ secrets.EC2_USER }}/cicdpipeline" ]; then
-              sudo rm -rf /home/${{ secrets.EC2_USER }}/cicdpipeline
-            fi
+            sudo systemctl restart docker || sudo service docker restart
+
             git clone https://github.com/phongcheat-phus/cicdpipeline.git /home/${{ secrets.EC2_USER }}/cicdpipeline
             cd /home/${{ secrets.EC2_USER }}/cicdpipeline
 
-            # ตรวจสอบว่าต้องใช้ docker compose หรือ docker-compose
-            if docker compose version >/dev/null 2>&1; then
-              COMPOSE_CMD="docker compose"
-            else
-              COMPOSE_CMD="docker-compose"
-            fi
+            docker network create web-app
 
-            # ตรวจสอบว่า Docker Network มีอยู่หรือไม่
-            if ! docker network inspect web-app >/dev/null 2>&1; then
-              docker network create web-app
-            fi
-
-            # รัน Docker Compose
             cd kong && sudo $COMPOSE_CMD up -d --build
             cd ../directus && sudo $COMPOSE_CMD up -d --build
