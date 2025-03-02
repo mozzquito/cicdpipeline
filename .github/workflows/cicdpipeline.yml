@@ -11,7 +11,6 @@ jobs:
     steps:
       - name: Checkout repository
         uses: actions/checkout@v2
-
       - name: Deploy Directus on EC2 AWS
         uses: appleboy/ssh-action@master
         with:
