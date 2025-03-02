@@ -1,0 +1,47 @@
+name: Deploy Directus on EC2 AWS
+
+on:
+  push:
+    branches:
+      - main
+  pull_branch:
+    branches:
+      - main
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v2
+
+      - name: Configure AWS credentials
+        uses: aws-actions/configure-aws-credentials@v1
+        with:
+          aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+          aws-region: us-east-1
+
+      - name: Deploy Directus on EC2 AWS
+        run: |
+          # Install AWS CLI
+          sudo apt-get update
+          sudo apt-get install -y awscli
+
+          # Install Docker
+          sudo apt-get install -y docker.io
+
+          # Install Docker Compose
+          sudo apt-get install -y docker-compose
+
+          # Clone the repository
+          git clone https://github.com/phongcheat-phus/cicdpipeline.git
+
+          # Navigate to the repository directory
+          cd cicdpipeline
+
+          cd kong && docker compose up -d --build 
+
+          cd directus && docker compose up -d --build
+
+        
