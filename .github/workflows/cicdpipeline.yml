@@ -14,15 +14,6 @@ jobs:
 
       - name: Deploy Directus on EC2 AWS
         run: |
-          # Install AWS CLI
-          sudo apt-get update
-          sudo apt-get install -y awscli
-
-          # Install Docker
-          sudo apt-get install -y docker.io
-
-          # Install Docker Compose
-          sudo apt-get install -y docker-compose
 
           # Clone the repository
           git clone https://github.com/phongcheat-phus/cicdpipeline.git
