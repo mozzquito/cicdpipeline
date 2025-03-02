@@ -18,12 +18,6 @@ jobs:
           username: ${{ secrets.EC2_USER }}
           key: ${{ secrets.EC2_SSH_KEY }}
           script: |
-            sudo apt-get update -y
-            sudo apt-get install -y docker.io docker-compose
-            sudo systemctl enable docker
-            sudo systemctl start docker
-            sudo usermod -aG docker $USER
-
             git clone https://github.com/phongcheat-phus/cicdpipeline.git
             cd /home/${{ secrets.EC2_USER }}/cicdpipeline
 
