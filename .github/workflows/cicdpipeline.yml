@@ -4,9 +4,6 @@ on:
   push:
     branches:
       - main
-  pull_branch:
-    branches:
-      - main
 
 jobs:
   deploy:
