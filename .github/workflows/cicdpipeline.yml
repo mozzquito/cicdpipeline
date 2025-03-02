@@ -18,6 +18,8 @@ jobs:
           # Clone the repository
           git clone https://github.com/phongcheat-phus/cicdpipeline.git
 
+          docker networl create web-app
+
           # Navigate to the repository directory
           cd cicdpipeline
 
