@@ -18,9 +18,25 @@ jobs:
           username: ${{ secrets.EC2_USER }}
           key: ${{ secrets.EC2_SSH_KEY }}
           script: |
-           mkdir /home/${{ secrets.EC2_USER }}/cicdpipeline && cd /home/${{ secrets.EC2_USER }}/cicdpipeline || git clone https://github.com/phongcheat-phus/cicdpipeline.git && cd cicdpipeline
-            
-            docker network create web-app || true
+           script: |
+            # ติดตั้ง Docker ถ้ายังไม่มี
+            sudo apt-get update -y
+            sudo apt-get install -y docker.io docker-compose
+            sudo systemctl enable docker
+            sudo systemctl start docker
+            sudo usermod -aG docker $USER
 
-            cd kong && docker compose up -d --build
-            cd ../directus && docker compose up -d --build
+            # ตรวจสอบว่ามีโฟลเดอร์ cicdpipeline หรือไม่
+            if [ ! -d "/home/${{ secrets.EC2_USER }}/cicdpipeline" ]; then
+              git clone https://github.com/phongcheat-phus/cicdpipeline.git /home/${{ secrets.EC2_USER }}/cicdpipeline
+            fi
+            cd /home/${{ secrets.EC2_USER }}/cicdpipeline
+
+            # ตรวจสอบ Docker ว่าพร้อมใช้งานหรือไม่
+            docker --version
+            docker-compose --version
+
+            # สร้าง Network และรัน Docker Compose
+            sudo docker network create web-app || true
+            cd kong && sudo docker compose up -d --build
+            cd ../directus && sudo docker compose up -d --build
