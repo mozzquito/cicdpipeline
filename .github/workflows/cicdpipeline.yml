@@ -11,6 +11,7 @@ jobs:
     steps:
       - name: Checkout repository
         uses: actions/checkout@v2
+
       - name: Deploy Directus on EC2 AWS
         uses: appleboy/ssh-action@master
         with:
@@ -18,12 +19,32 @@ jobs:
           username: ${{ secrets.EC2_USER }}
           key: ${{ secrets.EC2_SSH_KEY }}
           script: |
-            sudo apt-get update
-            sudo apt-get install -y docker-compose
-            
-            git clone https://github.com/phongcheat-phus/cicdpipeline.git
+            # ติดตั้ง Docker & Docker Compose ถ้ายังไม่มี
+            sudo apt-get update -y
+            sudo apt-get install -y docker.io docker-compose
+            sudo systemctl enable docker
+            sudo systemctl start docker
+            sudo usermod -aG docker $USER
+
+            # ตรวจสอบว่ามีโฟลเดอร์ cicdpipeline หรือไม่
+            if [ -d "/home/${{ secrets.EC2_USER }}/cicdpipeline" ]; then
+              sudo rm -rf /home/${{ secrets.EC2_USER }}/cicdpipeline
+            fi
+            git clone https://github.com/phongcheat-phus/cicdpipeline.git /home/${{ secrets.EC2_USER }}/cicdpipeline
             cd /home/${{ secrets.EC2_USER }}/cicdpipeline
 
-            sudo docker network create web-app || true
-            cd kong && docker compose up -d --build
-            cd ../directus && docker compose up -d --build
+            # ตรวจสอบว่าต้องใช้ docker compose หรือ docker-compose
+            if docker compose version >/dev/null 2>&1; then
+              COMPOSE_CMD="docker compose"
+            else
+              COMPOSE_CMD="docker-compose"
+            fi
+
+            # ตรวจสอบว่า Docker Network มีอยู่หรือไม่
+            if ! docker network inspect web-app >/dev/null 2>&1; then
+              docker network create web-app
+            fi
+
+            # รัน Docker Compose
+            cd kong && sudo $COMPOSE_CMD up -d --build
+            cd ../directus && sudo $COMPOSE_CMD up -d --build
