@@ -18,7 +18,7 @@ jobs:
           username: ${{ secrets.EC2_USER }}
           key: ${{ secrets.EC2_SSH_KEY }}
           script: |
-            cd /home/${{ secrets.EC2_USER }}/cicdpipeline || git clone https://github.com/phongcheat-phus/cicdpipeline.git && cd cicdpipeline
+           mkdir /home/${{ secrets.EC2_USER }}/cicdpipeline && cd /home/${{ secrets.EC2_USER }}/cicdpipeline || git clone https://github.com/phongcheat-phus/cicdpipeline.git && cd cicdpipeline
             
             docker network create web-app || true
 
