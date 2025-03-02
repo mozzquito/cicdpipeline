@@ -35,5 +35,5 @@ jobs:
 
             docker network create web-app
 
-            cd kong && sudo $COMPOSE_CMD up -d --build
-            cd ../directus && sudo $COMPOSE_CMD up -d --build
+            cd kong && sudo docker compouse up -d --build
+            cd ../directus && sudo docker compose up -d --build
