@@ -28,5 +28,5 @@ jobs:
             cd /home/${{ secrets.EC2_USER }}/cicdpipeline
 
             sudo docker network create web-app || true
-            cd kong && sudo docker compose up -d --build
-            cd ../directus && sudo docker compose up -d --build
+            cd kong && docker compose up -d --build
+            cd ../directus && docker compose up -d --build
