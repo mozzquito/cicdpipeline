@@ -16,13 +16,12 @@ jobs:
         uses: appleboy/ssh-action@master
         
         with:
-          host: ${{ secrets.HOST }}
-          username: ${{ secrets.USERNAME }}
-          key: ${{ secrets.KEY }}
-          port: ${{ secrets.PORT }}
+          host: ${{ secrets.EC2_HOST }}
+          username: ${{ secrets.EC2_USER }}
+          key: ${{ secrets.EC2_SSH_KEY }}
           script: |
           
-            cd nginx && docker compose up -d --build
+            cd ./cicdpipeline/nginx && docker compose up -d --build
             cd ../directus && sudo rm -rf postgres && docker compose up -d --build
             cd ../kong && sudo rm -rf kong-pg  konga-db  && docker compose up -d --build
             
