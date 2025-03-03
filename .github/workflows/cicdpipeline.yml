@@ -18,7 +18,7 @@ jobs:
         with:
           host: ${{ secrets.EC2_HOST }}
           username: ${{ secrets.EC2_USER }}
-          key: ${{ secrets.EC2_SSH_KEY }}
+          key: ${{ secrets.PRIVATE_KEY }}
           script: |
           
             cd ./cicdpipeline/nginx && docker compose up -d --build
