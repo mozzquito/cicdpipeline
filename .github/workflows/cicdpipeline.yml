@@ -44,6 +44,6 @@ jobs:
 
             cd directus && sudo rm -rf postgres && sudo docker compose up -d --build
             sleep 30
-            cd ../kong && sudo docker compouse up -d --build
+            cd ../kong && sudo rm -rf kong-pg  konga-db && sudo docker compouse up -d --build
             
             
