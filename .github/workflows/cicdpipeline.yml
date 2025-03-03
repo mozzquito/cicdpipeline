@@ -11,33 +11,17 @@ jobs:
     steps:
       - name: Checkout repository
         uses: actions/checkout@v2
-        
-      - name: Clean up Docker Volumes
-        run: docker volume prune -f
-        
+
       - name: Deploy Directus on EC2 AWS
         uses: appleboy/ssh-action@master
         
         with:
-          host: ${{ secrets.EC2_HOST }}
-          username: ${{ secrets.EC2_USER }}
-          key: ${{ secrets.EC2_SSH_KEY }}
+          host: ${{ secrets.HOST }}
+          username: ${{ secrets.USERNAME }}
+          key: ${{ secrets.KEY }}
+          port: ${{ secrets.PORT }}
           script: |
-
-            sudo apt update -y
-            sudo apt install -y docker.io 
-            sudo apt install docker-compose-v2
-
-            sudo usermod -aG docker $USER
-            newgrp docker
-
-            sudo systemctl restart docker || sudo service docker restart
-
-            git clone https://github.com/phongcheat-phus/cicdpipeline.git /home/${{ secrets.EC2_USER }}/cicdpipeline
-            cd /home/${{ secrets.EC2_USER }}/cicdpipeline
-
-            docker network create web-app
-
+          
             cd nginx && docker compose up -d --build
             cd ../directus && sudo rm -rf postgres && docker compose up -d --build
             cd ../kong && sudo rm -rf kong-pg  konga-db  && docker compose up -d --build
