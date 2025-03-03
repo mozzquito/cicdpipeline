@@ -41,7 +41,8 @@ jobs:
             sudo sysctl vm.overcommit_memory=1
             sudo sysctl vm.overcommit_memory
 
-            cd directus && sudo rm -rf postgres && docker compose up -d --build
+            cd nginx && docker compose up -d --build
+            cd ../directus && sudo rm -rf postgres && docker compose up -d --build
             cd ../kong && sudo rm -rf kong-pg  konga-db  && docker compose up -d --build
             
             
