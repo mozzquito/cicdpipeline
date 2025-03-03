@@ -23,6 +23,7 @@ services:
   cache:
     image: redis:6
     container_name: cache
+    command: ["sh", "-c", "sysctl -w vm.overcommit_memory=1 && redis-server"]
     healthcheck:
       test: ["CMD-SHELL", "[ $$(redis-cli ping) = 'PONG' ]"]
       interval: 10s
