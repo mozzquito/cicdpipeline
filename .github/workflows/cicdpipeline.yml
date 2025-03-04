@@ -21,9 +21,10 @@ jobs:
           key: ${{ secrets.EC2_SSH_KEY }}
           port: 22 
           script: |
-          
-            cd ./cicdpipeline/nginx && docker compose up -d --build
-            cd ../directus && sudo rm -rf postgres && docker compose up -d --build
-            cd ../kong && sudo rm -rf kong-pg  konga-db  && docker compose up -d --build
+            
+            ls -la 
+            #cd ./cicdpipeline/nginx && docker compose up -d --build
+            #cd ../directus && sudo rm -rf postgres && docker compose up -d --build
+            #cd ../kong && sudo rm -rf kong-pg  konga-db  && docker compose up -d --build
             
             
