@@ -1,0 +1,16 @@
+version: "3.8"
+services:
+  portainer:
+    container_name: portainer
+    image: portainer/portainer-ce:2.24.0
+    restart: always
+    ports:
+      - 9010:9000
+    volumes:
+      - ./data:/data
+      - /var/run/docker.sock:/var/run/docker.sock
+
+networks:
+  default:
+    name: web-app
+    external: true
