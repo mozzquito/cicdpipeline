@@ -22,8 +22,9 @@ jobs:
           port: 22 
           script: |
             
-            #cd ./cicdpipeline/nginx && docker compose up -d --build
-            cd ./cicdpipeline/directus && sudo rm -rf postgres && docker compose up -d --build
-            #cd ../kong && sudo rm -rf kong-pg  konga-db  && docker compose up -d --build
+            cd ./cicdpipeline/api && docker compose up -d --build
+            cd ../nginx && docker compose up -d --build
+            cd ../kong && sudo rm -rf kong-pg  konga-db  && docker compose up -d --build
+            cd ../directus && sudo rm -rf postgres && docker compose up -d --build
             
             
